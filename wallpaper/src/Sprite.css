@@ -1,0 +1,45 @@
+.Sprite {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.Sprite img {
+    width: 100%;
+    height: 100%;
+}
+
+.Sprite .Shadow {
+    position: absolute;
+    left: 20%;
+    top: 80%;
+    width: 60%;
+    height: 15%;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 0;
+    border-radius: 50%;
+}
+
+@keyframes animation_walk {
+    0% {transform: skew(0deg, 0deg);}
+    25% {transform: skew(5deg, 0deg);}
+    50% {transform: skew(0deg, 0deg);}
+    75% {transform: skew(-5deg, 0deg);}
+    100% {transform: skew(0deg, 0deg);}
+}
+.animation_walk {
+    animation: animation_walk 0.6s infinite;
+}
+
+@keyframes animation_blink {
+    0% {transform: scale(1, 1);}
+    10% {transform: scale(1.2, 0.1);}
+    20% {transform: scale(1, 1);}
+    100% {transform: scale(1, 1);}
+}
+.animation_blink {
+    animation: animation_blink 5s infinite;
+    transform-origin: 50% 45%;
+}

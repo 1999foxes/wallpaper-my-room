@@ -1,0 +1,48 @@
+.Player {
+    width: 24vh;
+    height: 24vh;
+}
+
+.Player .Body, .Player .Eyes, .Player .Outfit {
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-clip: content-box;
+    border: 2vh solid transparent;
+}
+.Player .Body {
+    background-color: white;
+    mask-image: url(./SpriteImages/player.png);
+    z-index: 0;
+}
+
+.Player .Eyes {
+    background-color: black;
+    mask-image: url(./SpriteImages/player-eyes.png);
+    z-index: 1;
+}
+
+.Player .Outfit {
+    /* background-image: url(./SpriteImages/player-outfit1.png); */
+    background-size: calc(100% + 4vh);
+    background-position: -2vh -2vh;
+    background-repeat: no-repeat;
+    background-clip: border-box;
+    z-index: 2;
+}
+
+.PlayerText {
+    border-radius: 2vh;
+    min-width: 7vh;
+    min-height: 4vh;
+    text-align: center;
+    font-size: 2.5vh;
+    padding-top: 0.5vh;
+    background: white;
+    transition: opacity 0.5s ease-in-out;
+}

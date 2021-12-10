@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* border: 1px solid red; */
+  border: none;
+  user-select: none;
+  image-rendering: pixelated;
+}
+
+html, body, #GameRoot {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+body {
+  background-color: gray;
+}
+
+#root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+}
+
+#menu {
+  position: fixed;
+  right: 5vh;
+  bottom: 10vh;
+  width: 6vh;
+}
+
+#menu .ImageButton {
+  float: left;
+  width: 6vh;
+  height: 6vh;
+  margin: 0.5vh 0;
+}
+
+/* #Gui .PopUp {
+  position: fixed;
+  right: 15vh;
+  bottom: 10vh;
+  width: 30vh;
+  height: 20vh;
+} */
+
+.emojiListEntry {
+  float: left;
+  width: 8vh;
+  height: 8vh;
+  margin: 0 1vh 0 1vh;
+  font-size: 5vh;
+  cursor: pointer;
+  border-radius: 20%;
+}
+
+.emojiListEntry:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.popupEditEntry {
+  margin-bottom: 5vh;
+}
+
+.outfitList, .backgroundList {
+  width: 31vh;
+}
+
+.outfitListEntry, .backgroundListEntry {
+  float: left;
+  width: 8vh;
+  height: 8vh;
+  margin: 1vh;
+  cursor: pointer;
+  border-radius: 20%;
+}

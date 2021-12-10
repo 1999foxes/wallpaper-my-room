@@ -1,0 +1,18 @@
+.ImageButton {
+    background: transparent;
+    height: 5vh;
+    width: 5vh;
+    background-color: white;
+    border-radius: 5vh;
+    box-shadow: 0.5vh 0.5vh 0 rgba(0, 0, 0, 0.2);
+}
+
+.ImageButton:hover {
+    filter: brightness(2);
+}
+
+.ImageButton img {
+    width: 100%;
+    height: 100%;
+    /* filter: drop-shadow(0.5vh 0.5vh 0 rgba(0, 0, 0, 0.2)); */
+}
