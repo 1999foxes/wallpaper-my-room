@@ -2,19 +2,11 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { game } from './game';
-import Sprite from './Sprite';
-import Player from './Player';
 import PopUp from './PopUp';
 import ImageButton from './ImageButton';
-import playerImg from './SpriteImages/player.png';
 import buttonEdit from './SpriteImages/button-edit.png';
 import buttonLeave from './SpriteImages/button-leave.png';
 import buttonTalk from './SpriteImages/button-talk.png';
-import { returnStatement } from '@babel/types';
-import outfitEmpty from './SpriteImages/empty.png';
-import outfit0 from './SpriteImages/player-outfit0.png';
-import outfit1 from './SpriteImages/player-outfit1.png';
-import bg0 from './SpriteImages/bg0.png';
 
 
 function PopUpTalk(props) {
@@ -33,7 +25,9 @@ function PopUpTalk(props) {
                 key={i}
                 className='emojiListEntry'
                 onClick={() => {
-                  game.player.say(emoji);
+                  const localPlayer = game.getLocalPlayer();
+                  localPlayer.say(emoji);
+                  localPlayer.needSync = true;
                   props.close();
                 }}
               >{emoji}</div>
@@ -47,19 +41,22 @@ function PopUpTalk(props) {
 }
 
 
+const outfitList = [
+  require('./SpriteImages/empty.png').default,
+];
+
+for (let i = 0; i < 20; ++i) {
+  outfitList.push(require('./SpriteImages/player-outfit'+i+'.png').default);
+}
+
+const backgroundList = [
+  require('./SpriteImages/bg0.png').default,
+  require('./SpriteImages/bg1.png').default,
+]
+
 function PopUpEdit(props) {
-  const outfitList = [
-    outfitEmpty, outfit0, outfit1,
-  ];
-
-  const [chosenOutfit, setChosenOutfit] = useState(game.player.outfit);
-
-  const backgroundList = [
-    outfitEmpty, outfit0, outfit1,
-    bg0,
-  ];
-
-  const [chosenBackground, setChosenBackground] = useState(outfitEmpty);
+  const [chosenOutfit, setChosenOutfit] = useState(game.getLocalPlayer().outfit);
+  const [chosenBackground, setChosenBackground] = useState(backgroundList[0]);
 
   return (
     <PopUp close={props.close}
@@ -67,11 +64,11 @@ function PopUpEdit(props) {
         <>
           <div className='popupEditEntry'>
             <label>Eye Color:  </label>
-            <input type='color' onChange={e => game.player.setEyeColor(e.target.value)} defaultValue={game.player.eyeColor}></input>
+            <input type='color' onChange={e => game.getLocalPlayer().setEyeColor(e.target.value)} defaultValue={game.getLocalPlayer().eyeColor}></input>
           </div>
           <div className='popupEditEntry'>
             <label>Body Color:  </label>
-            <input type='color' onChange={e => game.player.setBodyColor(e.target.value)} defaultValue={'white'}></input>
+            <input type='color' onChange={e => game.getLocalPlayer().setBodyColor(e.target.value)} defaultValue={'white'}></input>
           </div>
           <div className='popupEditEntry'>
             <label>Outfit:  </label>
@@ -81,7 +78,9 @@ function PopUpEdit(props) {
                   <img key={outfit} className='outfitListEntry' src={outfit}
                     style={{ background: outfit === chosenOutfit ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.1)' }}
                     onClick={() => {
-                      game.player.setOutfit(outfit);
+                      const localPlayer = game.getLocalPlayer();
+                      localPlayer.setOutfit(outfit);
+                      localPlayer.needSync = true;
                       setChosenOutfit(outfit);
                     }}
 
@@ -119,7 +118,10 @@ function PopUpLeave(props) {
   return (
     <PopUp close={props.close}
       content={
-        'leave'
+        <>
+        <button onClick={() => game.connectToLocalHost()}>connect to local host</button>
+        <button onClick={() => game.connectToRemoteHost()}>connect to remote host</button>
+        </>
       }
     >
     </PopUp>
@@ -150,23 +152,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-function animate(timeStamp) {
-  requestAnimationFrame(animate);
-
-  game.deltaTime = timeStamp - game.time;
-  game.time = timeStamp;
-  // if (game.deltaTime < 100) return;  // limit fps
-
-  // update game objects
-  for (const gameObject of game.gameObjects) {
-    gameObject.update();
-  }
-
-  // render popups
-  for (const p of game.popUps) {
-
-  }
-}
-
-requestAnimationFrame(animate);
 

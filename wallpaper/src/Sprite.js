@@ -7,8 +7,10 @@ const gameRoot = document.getElementById('GameRoot');
 
 
 class Sprite {
-    constructor({ image = emptyImg, x = 0, y = 0, scaleX = 1, scaleY = 1, animation = 'animations_none' }) {
-        game.gameObjects.push(this);
+    constructor({ id = undefined, image = emptyImg, x = 0, y = 0, scaleX = 1, scaleY = 1, animation = 'animations_none' }) {
+        this.id = (id !== undefined)? id : game.getUniqueID();
+        this.type = 'Sprite';
+        game.gameObjects.set(this.id, this);
 
         // dom
         this.domElement = document.createElement('div');
@@ -44,7 +46,7 @@ class Sprite {
         }
         this.domElement = undefined;
         this.image = undefined;
-        game.gameObjects.remove(this);
+        game.gameObjects.delete(this.id);
     }
 
     setImage(imageUrl) {
@@ -64,6 +66,7 @@ class Sprite {
     }
 
     setTransform(x = 0, y = 0, scaleX = 1, scaleY = 1, align = 'bottom') {
+        this.setStyle({zIndex: Math.floor(y)});
         const [vw, vh] = game.xy2vwvh(x, y);
         if (align === 'center') {
             this.setStyle({
@@ -90,6 +93,7 @@ class Sprite {
 
     move(targetX = undefined, targetY = undefined, speed = 1) {
         if (targetX !== undefined) {
+            if (targetX === this.x && targetY === this.y) return;
             this.isMoving = true;
             this.targetX = targetX;
             this.targetY = targetY;
@@ -119,10 +123,27 @@ class Sprite {
         }
     }
 
+    set({x = 0, y = 0}) {
+        this.x = x;
+        this.y = y;
+    }
+
+    get() {
+        return {
+            type: this.type,
+            x: this.x,
+            y: this.y,
+        };
+    }
+
     update() {
-        this.setTransform(this.x, this.y, this.scaleX, this.scaleY);
         if (this.isMoving) {
             this.move();
+            this.setTransform(this.x, this.y, this.scaleX, this.scaleY);
+        }
+        if (this.needSync) {
+            game.queueEvent({playerID: game.getLocalPlayer().id, objectID: this.id, eventType: 'set', data: this.get()});
+            this.needSync = false;
         }
     }
 }
